@@ -42,7 +42,7 @@ func main() {
                 log.Fatal(err)
         }
 
-	_, readerr := read_message(s)
+	message, readerr := read_message(s)
 	if readerr != nil {
                 log.Fatal(readerr)
         }
@@ -54,7 +54,7 @@ func main() {
                 log.Fatal(err)
         }
 
-	message, readerr := read_message(s)
+	message, readerr = read_message(s)
 	if readerr != nil {
                 log.Fatal(readerr)
         }
@@ -150,34 +150,53 @@ func main() {
 
 	log.Println(fmt.Sprintf("\tCounter is 0x%X credits.", message.data[1:3]))
 
+	/* Writing to the counter doesn't work, we receive an error about invalid instruction code.
+	log.Println("Writing to counter.")
+
+	err = write_message(construct_message(0x14, 0x00, 0xD2, 0x05, 0x08, 0x02, 0x00, 0x02), s)
+        if err != nil {
+                log.Fatal(err)
+        }
+
+	message, readerr = read_message(s)
+	if readerr != nil {
+                log.Fatal(readerr)
+        }
+
+	log.Println(fmt.Sprintf("\t%X", message.data))
+	*/
+
+	/* Writing to memory doesn't return an error but also doesn't do anything.
+	log.Println("Writing to memory (at counter position).")
+
+	err = write_message(construct_message(0x14, 0x00, 0xD0, 0x00, 0x0C, 0x01, 0x01), s)
+        if err != nil {
+                log.Fatal(err)
+        }
+
+	message, readerr = read_message(s)
+	if readerr != nil {
+                log.Fatal(readerr)
+        }
+
+	log.Println(fmt.Sprintf("%X", message.data))
+	*/
+
 	/*
-	_, err = s.Write(construct_message(0x14, 0x00, 0xD0, 0x00, 0x0C, 0x01, 0x01))
+	log.Println("Dumping memory...")
+
+	// Memory wraps around after 0x10 bytes.
+	err = write_message(construct_message(0x13, 0x00, 0xB0, 0x00, 0x00, 0x10), s)
         if err != nil {
                 log.Fatal(err)
         }
-
-	log.Println("Add credit!")
 
 	message, readerr = read_message(s)
 	if readerr != nil {
                 log.Fatal(readerr)
         }
 
-	log.Println(fmt.Sprintf("%X", message.data))
-
-	_, err = s.Write(construct_message(0x13, 0x00, 0xB0, 0x00, 0x00, 0x10))
-        if err != nil {
-                log.Fatal(err)
-        }
-
-	log.Println("Memory inquiry.")
-
-	message, readerr = read_message(s)
-	if readerr != nil {
-                log.Fatal(readerr)
-        }
-
-	log.Println(fmt.Sprintf("%X", message.data))
+	log.Println(fmt.Sprintf("\t0x%X", message.data))
 	*/
 }
 
